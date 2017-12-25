@@ -18,7 +18,7 @@ class TbFormulirPendaftaranSearch extends TbFormulirPendaftaran
     public function rules()
     {
         return [
-            [['id', 'user_id', 'jenis_zakat_id', 'umur', 'jk', 'tgl_lahir', 'status'], 'integer'],
+            [['id', 'user_id', 'jenis_zakat_id', 'umur', 'jk', 'tgl_lahir', 'status_formulir'], 'integer'],
             [['nomor', 'nama', 'alamat', 'agama', 'pekerjaan', 'no_hp', 'upload_surat_permohonan', 'upload_ktp', 'upload_kk', 'upload_surat_keterangan_tidak_mampu'], 'safe'],
         ];
     }
@@ -39,10 +39,16 @@ class TbFormulirPendaftaranSearch extends TbFormulirPendaftaran
      *
      * @return ActiveDataProvider
      */
+    public $all = false;
+    public $status_view = [0,1,2];
     public function search($params)
     {
         $query = TbFormulirPendaftaran::find();
 
+        if(!$this->all){
+            $query->where(['status_formulir'=> null]);
+            $query->orWhere(['status_formulir'=>$this->status_view]);
+        }
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -54,9 +60,10 @@ class TbFormulirPendaftaranSearch extends TbFormulirPendaftaran
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
-            return $dataProvider;
+            //return $dataProvider;
         }
 
+        
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
@@ -65,8 +72,10 @@ class TbFormulirPendaftaranSearch extends TbFormulirPendaftaran
             'umur' => $this->umur,
             'jk' => $this->jk,
             'tgl_lahir' => $this->tgl_lahir,
-            'status' => $this->status,
+            'status_formulir' => $this->status_formulir,
         ]);
+        
+        
 
         $query->andFilterWhere(['like', 'nomor', $this->nomor])
             ->andFilterWhere(['like', 'nama', $this->nama])

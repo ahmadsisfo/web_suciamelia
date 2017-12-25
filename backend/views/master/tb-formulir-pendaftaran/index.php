@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use backend\models\master\TbJenisZakat;
+use backend\models\master\TbFormulirPendaftaran;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\master\TbFormulirPendaftaranSearch */
@@ -13,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tb-formulir-pendaftaran-index card">
 
-    <div class="card-header card-header-icon" data-background-color="rose">
+    <div class="card-header card-header-icon" data-background-color="gray">
         <i class="material-icons">list</i>
     </div>
     <div class="card-content">
@@ -43,8 +44,10 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'alamat',
             // 'agama',
             // 'pekerjaan',
-            // 'status',
             'no_hp',
+            ['attribute'=>'status_formulir','value'=>function($model){
+                return $model->status_formulir!==null ? TbFormulirPendaftaran::enums('STATUS_')[$model->status_formulir]:'TERDAFTAR';
+            }],
             // 'upload_surat_permohonan',
             // 'upload_ktp',
             // 'upload_kk',

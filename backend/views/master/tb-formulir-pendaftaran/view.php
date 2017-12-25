@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tb-formulir-pendaftaran-view card">
 
-    <div class="card-header card-header-icon" data-background-color="rose">
+    <div class="card-header card-header-icon" data-background-color="gray">
         <i class="material-icons">web</i>
     </div>
     <div class="card-content">
@@ -46,7 +46,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'alamat',
             'agama',
             'pekerjaan',
-            'status',
+            ['attribute'=>'status_formulir','value'=>function($model){
+                return $model->status_formulir!==null?TbFormulirPendaftaran::enums('STATUS_')[$model->status_formulir]:'TERDAFTAR';
+            }],
             'no_hp',
             'created_at:datetime',
             'created_by',
@@ -67,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'    =>function($model){
                     $url  = Url::toRoute(['pict','id'=>$model->id,'field'=>'upload_kk']);
                     $img  = '<a target="_blank" href="'.$url.'"><img src="'.$url.'" style="width:100px" /></a>';
-                    return $model->upload_ktp?$img:'';
+                    return $model->upload_kk?$img:'';
                 }
             ],
                     
@@ -77,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'    =>function($model){
                     $url  = Url::toRoute(['pict','id'=>$model->id,'field'=>'upload_surat_permohonan']);
                     $img  = '<a target="_blank" href="'.$url.'"><img src="'.$url.'" style="width:100px" /></a>';
-                    return $model->upload_ktp?$img:'';
+                    return $model->upload_surat_permohonan?$img:'';
                 }
             ],
             [
@@ -86,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'    =>function($model){
                     $url  = Url::toRoute(['pict','id'=>$model->id,'field'=>'upload_surat_keterangan_tidak_mampu']);
                     $img  = '<a target="_blank" href="'.$url.'"><img src="'.$url.'" style="width:100px" /></a>';
-                    return $model->upload_ktp?$img:'';
+                    return $model->upload_surat_keterangan_tidak_mampu?$img:'';
                 }
             ],
             
@@ -101,7 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value'    =>function($model){
                             $url  = Url::toRoute(['pict','id'=>$model->id,'field'=>'upload_surat_keterangan_sakit']);
                             $img  = '<a target="_blank" href="'.$url.'"><img src="'.$url.'" style="width:100px" /></a>';
-                            return $model->upload_ktp?$img:'';
+                            return $img;
                         }
                     ],
                     [
@@ -110,7 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value'    =>function($model){
                             $url  = Url::toRoute(['pict','id'=>$model->id,'field'=>'upload_foto_bukti_sakit']);
                             $img  = '<a target="_blank" href="'.$url.'"><img src="'.$url.'" style="width:100px" /></a>';
-                            return $model->upload_ktp?$img:'';
+                            return $img;
                         }
                     ],
                     [
@@ -119,7 +121,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value'    =>function($model){
                             $url  = Url::toRoute(['pict','id'=>$model->id,'field'=>'upload_kwitansi']);
                             $img  = '<a target="_blank" href="'.$url.'"><img src="'.$url.'" style="width:100px" /></a>';
-                            return $model->upload_ktp?$img:'';
+                            return $img;
                         }
                     ],
                     [
@@ -128,7 +130,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value'    =>function($model){
                             $url  = Url::toRoute(['pict','id'=>$model->id,'field'=>'upload_foto_rumah']);
                             $img  = '<a target="_blank" href="'.$url.'"><img src="'.$url.'" style="width:100px" /></a>';
-                            return $model->upload_ktp?$img:'';
+                            return $img;
                         }
                     ],                                    
                 ];
@@ -144,7 +146,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value'    =>function($model){
                             $url  = Url::toRoute(['pict','id'=>$model->id,'field'=>'upload_foto_ukm']);
                             $img  = '<a target="_blank" href="'.$url.'"><img src="'.$url.'" style="width:100px" /></a>';
-                            return $model->upload_ktp?$img:'';
+                            return $img;
                         }
                     ],
                     [
@@ -153,7 +155,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value'    =>function($model){
                             $url  = Url::toRoute(['pict','id'=>$model->id,'field'=>'upload_foto_tempat_usaha']);
                             $img  = '<a target="_blank" href="'.$url.'"><img src="'.$url.'" style="width:100px" /></a>';
-                            return $model->upload_ktp?$img:'';
+                            return $img;
                         }
                     ],        
                 ];
@@ -166,7 +168,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value'    =>function($model){
                             $url  = Url::toRoute(['pict','id'=>$model->id,'field'=>'upload_surat_keterangan_hutang']);
                             $img  = '<a target="_blank" href="'.$url.'"><img src="'.$url.'" style="width:100px" /></a>';
-                            return $model->upload_ktp?$img:'';
+                            return $img;
                         }
                     ],
                     [
@@ -175,7 +177,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value'    =>function($model){
                             $url  = Url::toRoute(['pict','id'=>$model->id,'field'=>'upload_foto_rumah']);
                             $img  = '<a target="_blank" href="'.$url.'"><img src="'.$url.'" style="width:100px" /></a>';
-                            return $model->upload_ktp?$img:'';
+                            return $img;
                         }
                     ], 
                 ];

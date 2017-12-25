@@ -22,6 +22,7 @@ class TbPernyataanSurvey extends \yii\db\ActiveRecord
 {
     use \mdm\converter\EnumTrait;
     
+    const SURVEY_PENERIMA  = 2;
     const SURVEY_DITOLAK   = 0;
     const SURVEY_DISETUJUI = 1;
     /**

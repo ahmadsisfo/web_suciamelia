@@ -48,6 +48,18 @@ class TbFormulirPendaftaranController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    
+    public function actionIndexAll()
+    {
+        $searchModel = new TbFormulirPendaftaranSearch();
+        $searchModel->all = true;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
     /**
      * Displays a single TbFormulirPendaftaran model.
@@ -276,8 +288,9 @@ class TbFormulirPendaftaranController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        $model->status_formulir = TbFormulirPendaftaran::STATUS_DELETED;
+        $model->save();
         return $this->redirect(['index']);
     }
 

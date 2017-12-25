@@ -16,8 +16,8 @@ $temp_roles = array_merge($troles, $temp_task);
 
 return[
     //'<li class="header">MAIN NAVIGATION</li>',
-    ['label' => 'Dashboard', 'icon' => 'dashboard', 'url'=>['home/dashboard'],'visible' => !Yii::$app->user->isGuest],
-    ['label' => 'Master', 'icon' => 'dns', 
+    ['label' => 'Dashboard', 'icon' => 'dashboard', 'fa'=>true, 'url'=>['/'],'visible' => !Yii::$app->user->isGuest],
+    ['label' => 'Master', 'icon' => 'list', 'fa'=>true, 
         'items' => [
             ['label' => 'Jenis Zakat', 'url' => ['/master/tb-jenis-zakat']],
             ['label' => 'Formulir Pendaftaran', 'url' => ['/master/tb-formulir-pendaftaran']],
@@ -41,10 +41,10 @@ return[
         'visible' => !Yii::$app->user->isGuest
     ],*/
     //'<li class="header">ADMIN MENU</li>',
-    ['label' => 'Setting', 'icon' => 'settings', 'iconOptions' => ['class' => 'text-orange'], 
+    ['label' => 'Setting', 'icon' => 'gear', 'fa'=>true, 'iconOptions' => ['class' => 'text-orange'], 
         'items' => [
-            ['label' => 'Users', 'icon' => 'user', 'fa'=>true, 'url' => ['master/user']],
-            ['label' => 'RBAC', 'icon' => 'settings_input_component',
+            ['label' => 'Admin', 'icon' => 'user', 'fa'=>true, 'url' => ['master/user']],
+            ['label' => 'RBAC', 'icon' => 'gears','fa'=>true,
                 'items' => [
                     ['label' => 'Routes', 'url' => ['/admin/route']],
                     ['label' => 'Rules', 'url' => ['/admin/rule']],

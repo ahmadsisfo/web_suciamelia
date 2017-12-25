@@ -39,6 +39,19 @@ class TbPernyataanSurveyController extends Controller
     public function actionIndex()
     {
         $searchModel = new TbPernyataanSurveySearch();
+        $searchModel->all = true;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+        
+    public function actionIndexAll()
+    {
+        $searchModel = new TbPernyataanSurveySearch();
+        $searchModel->all = true;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -66,15 +79,34 @@ class TbPernyataanSurveyController extends Controller
      */
     public function actionCreate()
     {
+        
         $model = new TbPernyataanSurvey();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
+        if ($model->load(Yii::$app->request->post())) {
+            $existmodel = TbPernyataanSurvey::findOne(['formulir_pendaftaran_id'=>$model->formulir_pendaftaran_id]);
+            if($existmodel != null){
+                $model  = $existmodel;
+                $model->load(Yii::$app->request->post());
+            }
+            $trans = Yii::$app->db->beginTransaction();
+            try {
+                $formulir = TbFormulirPendaftaran::findOne($model->formulir_pendaftaran_id);
+                $formulir->status_formulir = $model->setuju;
+                $formulir->save();
+
+                if($model->save()){
+                    $trans->commit();
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            } catch (Exception $ex) {
+                $trans->rollBack();
+            }
+            
+        } 
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+        
     }
 
     /**
@@ -87,8 +119,21 @@ class TbPernyataanSurveyController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $trans = Yii::$app->db->beginTransaction();
+            try {
+                $formulir = TbFormulirPendaftaran::findOne($model->formulir_pendaftaran_id);
+                $formulir->status_formulir = $model->setuju;
+                $formulir->save();
+
+                if($model->save()){
+                    $trans->commit();
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            } catch (Exception $ex) {
+                $trans->rollBack();
+            }
+            
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -104,7 +149,11 @@ class TbPernyataanSurveyController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model    = $this->findModel($id);
+        $formulir = TbFormulirPendaftaran::findOne($model->formulir_pendaftaran_id);
+        $formulir->status_formulir = null;
+        $formulir->save();
+        $model->delete();
 
         return $this->redirect(['index']);
     }

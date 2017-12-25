@@ -21,7 +21,7 @@ use yii\behaviors\BlameableBehavior;
  * @property string $alamat
  * @property string $agama
  * @property string $pekerjaan
- * @property integer $status
+ * @property integer $status_formulir
  * @property string $no_hp
  * @property resource $upload_surat_permohonan
  * @property resource $upload_ktp
@@ -42,8 +42,16 @@ use yii\behaviors\BlameableBehavior;
  */
 class TbFormulirPendaftaran extends \yii\db\ActiveRecord
 {
+    use \mdm\converter\EnumTrait;
+     
     const SCENE_UPDATE      = 'update';
     const SCENE_NULL_NUMBER = 'blank';
+    
+    const STATUS_DELETED          = -1;
+    //const STATUS_TERDAFTAR        = NULL;
+    const STATUS_SURVEY_DISETUJUI = 1;
+    const STATUS_SURVEY_DITOLAK   = 0;
+    const STATUS_PENERIMA         = 2;
     /**
      * @inheritdoc
      */
@@ -61,7 +69,7 @@ class TbFormulirPendaftaran extends \yii\db\ActiveRecord
             [['jenis_zakat_id','nama'], 'required', 'on'=> UserBiasa::SCENE_CREATE],
             [['jenis_zakat_id','nama'], 'required', 'on'=>  self::SCENE_UPDATE],
             [['nomor'], 'autonumber', 'format' => 'BAZ' . date('y'). date('m') . '?', 'digit' => 3, 'on' => static::SCENE_NULL_NUMBER],
-            [['user_id', 'jenis_zakat_id', 'umur', 'jk', 'tgl_lahir', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['user_id', 'jenis_zakat_id', 'umur', 'jk', 'tgl_lahir', 'status_formulir', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['upload_surat_permohonan', 'upload_ktp', 'upload_kk', 'upload_surat_keterangan_tidak_mampu'], 'string'],
             [['nomor'], 'string', 'max' => 32],
             [['nama', 'agama', 'pekerjaan'], 'string', 'max' => 256],

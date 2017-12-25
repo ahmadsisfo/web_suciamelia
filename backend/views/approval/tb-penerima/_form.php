@@ -12,7 +12,7 @@ use backend\models\master\TbJenisZakat;
 
 <div class="tb-penerima-form card">
 
-    <div class="card-header card-header-icon" data-background-color="rose">
+    <div class="card-header card-header-icon" data-background-color="green">
         <i class="material-icons">web</i>
     </div>
     <div class="card-content">

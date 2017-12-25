@@ -12,7 +12,7 @@ use yii\helpers\Url;
 ?>
 
 <div class="tb-formulir-pendaftaran-form card  wizard-card">
-    <div class="card-header card-header-icon" data-background-color="rose">
+    <div class="card-header card-header-icon" data-background-color="orange">
         <i class="material-icons">web</i>
     </div>
     <div class="card-content">
@@ -76,9 +76,7 @@ use yii\helpers\Url;
                 <div class="col-md-2">
                     <?= $form->field($model, 'jk')->radioList(User::enums('JK_'))->label('Jenis Kelamin') ?>    
                 </div> 
-                <div class="col-md-2">
-                    <?= $form->field($model, 'status')->checkbox(['value'=>10, 'togglebutton'=>'true',]) ?>     
-                </div> 
+                
             </div> 
      
             <div class="row">

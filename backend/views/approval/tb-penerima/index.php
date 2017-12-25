@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tb-penerima-index card">
 
-    <div class="card-header card-header-icon" data-background-color="rose">
+    <div class="card-header card-header-icon" data-background-color="green">
         <i class="material-icons">list</i>
     </div>
     <div class="card-content">

@@ -40,10 +40,14 @@ class TbPernyataanSurveySearch extends TbPernyataanSurvey
      *
      * @return ActiveDataProvider
      */
+    public $all = false;
     public function search($params)
     {
         $query = TbPernyataanSurvey::find();
 
+        if(!$this->all){
+            $query->where(['!=','setuju',  TbPernyataanSurvey::SURVEY_PENERIMA]);
+        }
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

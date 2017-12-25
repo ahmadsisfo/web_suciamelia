@@ -55,7 +55,7 @@ class m171221_012446_primary_table extends Migration
             'alamat'        => $this->string(1024),
             'agama'         => $this->string(256),
             'pekerjaan'     => $this->string(256),
-            'status'        => $this->smallInteger(),
+            'status_formulir'  => $this->smallInteger(),
             'no_hp'         => $this->string(64),
             'upload_surat_permohonan'   => 'LONGBLOB',
             'upload_ktp'    => 'LONGBLOB',
