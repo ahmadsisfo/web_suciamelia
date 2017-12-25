@@ -154,7 +154,20 @@ class TbPenerimaController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        
+        $trans = Yii::$app->db->beginTransaction();
+        try {
+            $survey = TbPernyataanSurvey::findOne($model->pernyataan_survey_id);
+            $survey->setuju = TbPernyataanSurvey::SURVEY_DITOLAK;
+            $survey->save();
+            if($model->delete()){
+                $trans->commit();
+            }
+        } catch (Exception $ex) {
+            $trans->rollBack();
+        }
+        
 
         return $this->redirect(['index']);
     }

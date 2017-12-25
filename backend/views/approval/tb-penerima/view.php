@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use backend\models\master\TbJenisZakat;
 use backend\models\master\TbFormulirPendaftaran;
+use backend\models\approval\TbPernyataanSurvey;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -37,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'formulir_pendaftaran_id',
             'pernyataan_survey_id',
+            'pernyataanSurvey.desc',
             'jumlah_zakat',
             'desc',
         ],

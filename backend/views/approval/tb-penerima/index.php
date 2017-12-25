@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use backend\models\master\TbFormulirPendaftaran;
+use backend\models\master\TbJenisZakat;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\approval\TbPenerimaSearch */
@@ -30,10 +32,34 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filterModel' => $searchModel,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
-
-                    'id',
-                    'formulir_pendaftaran_id',
-                    'pernyataan_survey_id',
+                    [
+                        'attribute'=>'nomor',
+                        'label' => 'Nomor',
+                        'value' => 'formulirPendaftaran.nomor',
+                        'filter'=> Html::activeTextInput($searchModel, 'nomor', ['class'=>'form-control']),
+                    ],
+                    [
+                        'attribute'=>'nama',
+                        'label' => 'Nama Penerima',
+                        'value' => 'formulirPendaftaran.nama',
+                        'filter'=> Html::activeTextInput($searchModel, 'nama', ['class'=>'form-control']),
+                    ],
+                    [
+                        'attribute'=>'no_hp',
+                        'label' => 'No Hp',
+                        'value' => 'formulirPendaftaran.no_hp',
+                        'filter'=> Html::activeTextInput($searchModel, 'no_hp', ['class'=>'form-control']),
+                    ],
+                    [
+                        'attribute'=>'jenis_zakat',
+                        'label' => 'Jenis Zakat',
+                        'value' => function($model){
+                            return TbJenisZakat::enums('ZAKAT_')[$model->formulirPendaftaran->jenis_zakat_id];
+                        },
+                        'filter'=> Html::activeDropDownList($searchModel, 'jenis_zakat', TbJenisZakat::enums('ZAKAT_'),['class'=>'form-control','prompt'=>'-select-']),
+                    ],
+                    //'formulir_pendaftaran_id',
+                    //'pernyataan_survey_id',
                     'jumlah_zakat',
                     'desc',
 

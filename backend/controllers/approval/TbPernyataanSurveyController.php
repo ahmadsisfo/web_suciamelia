@@ -118,7 +118,8 @@ class TbPernyataanSurveyController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        $model->setuju = $model->setuju==TbPernyataanSurvey::SURVEY_PENERIMA?TbPernyataanSurvey::SURVEY_DITOLAK:$model->setuju;
+        
         if ($model->load(Yii::$app->request->post())) {
             $trans = Yii::$app->db->beginTransaction();
             try {
@@ -180,6 +181,7 @@ class TbPernyataanSurveyController extends Controller
         $data = TbFormulirPendaftaran::find()
                 ->andFilterWhere(['like', 'lower(nama)', strtolower($term)])
                 ->orFilterWhere(['like', 'lower(nomor)', strtolower($term)])
+                ->andWhere(['status_formulir'=>null])
                 ->limit(10)
                 ->all();
         $datafix = [];

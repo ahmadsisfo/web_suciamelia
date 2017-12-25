@@ -28,6 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="row">
             <?= GridView::widget([
+                'rowOptions' => function ($model, $key, $index, $grid) {
+                    if($model->setuju == TbPernyataanSurvey::SURVEY_PENERIMA)
+                        return ['style' => 'background:#4CCB76; color:white'];
+                    if($model->setuju == TbPernyataanSurvey::SURVEY_DITOLAK)
+                        return ['style' => 'background:#EE6E19; color:white'];
+                },
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
                 'columns' => [
@@ -45,7 +51,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['attribute'=>'setuju', 'value'=>function($model){return TbPernyataanSurvey::enums('SURVEY_')[$model->setuju];}],
                     'desc',
 
-                    ['class' => 'yii\grid\ActionColumn'],
+                    [   'class' => 'yii\grid\ActionColumn',
+                        'template' => ' {view}  {update} ',
+                    ],
                 ],
             ]); ?>
         </div>
