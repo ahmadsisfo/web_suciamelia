@@ -90,8 +90,8 @@ MaterialAsset::register($this);
                 <div class="container-fluid">
                     <div class="navbar-minimize">
                         <button class="btn btn-round btn-white btn-fill btn-just-icon" id="minimizeSidebar">
-                            <i class="material-icons visible-on-sidebar-regular">more_vert</i>
-                            <i class="material-icons visible-on-sidebar-mini">view_list</i>
+                            <i class="visible-on-sidebar-regular fa fa-list"></i>
+                            <i class="visible-on-sidebar-mini fa fa-list"></i>
                         <div class="ripple-container"></div></button>
                     </div>
                     <div class="navbar-header">
@@ -118,7 +118,7 @@ MaterialAsset::register($this);
                                     <p class="hidden-lg hidden-md">Home</p>
                                 </a>
                             </li>
-                            <li class="dropdown">
+                            <!--<li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="material-icons">notifications</i>
                                     <span class="notification">5</span>
@@ -131,7 +131,7 @@ MaterialAsset::register($this);
                                     <li><a href="#">Another Notification</a></li>
                                     <li><a href="#">Another One</a></li>
                                 </ul>
-                            </li>
+                            </li>-->
                             <li>
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                    <i class="material-icons">person</i>

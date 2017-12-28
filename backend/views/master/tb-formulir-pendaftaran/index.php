@@ -29,16 +29,16 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row">
     <?= GridView::widget([
         'rowOptions' => function ($model, $key, $index, $grid) {
-            if($model->status_formulir == null)
+            if($model->status_formulir === null)
                 return ['style' => 'color:black'];
             else if($model->status_formulir == TbFormulirPendaftaran::STATUS_DELETED)
-                return ['style' => 'background:#F44336; color:white'];
+                return ['style' => 'background:black; color:white'];
             else if($model->status_formulir == TbFormulirPendaftaran::STATUS_PENERIMA)
                 return ['style' => 'background:green; color:white'];
             else if($model->status_formulir == TbFormulirPendaftaran::STATUS_SURVEY_DISETUJUI)
-                return ['style' => 'background:orange; color:white'];
+                return ['style' => 'background:#19C3EE; color:white'];
             else if($model->status_formulir == TbFormulirPendaftaran::STATUS_SURVEY_DITOLAK)
-                return ['style' => 'background:black; color:white'];
+                return ['style' => 'background:#EE6E19; color:white'];
         },
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,

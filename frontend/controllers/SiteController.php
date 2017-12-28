@@ -12,6 +12,12 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use frontend\models\master\UserBiasa;
+use frontend\models\master\TbFormulirPendaftaran;
+use frontend\models\master\TbJenisZakat;
+use frontend\models\master\TbZakatBantuanBerobat;
+use frontend\models\master\TbZakatModalUsaha;
+use frontend\models\master\TbZakatTerlilitHutang;
 
 /**
  * Site controller
@@ -72,9 +78,195 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+
         return $this->render('index');
     }
+    
+    public function actionSyarat()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        return $this->render('syarat');
+    }
+    
+    public function actionPengumuman()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        return $this->render('pengumuman');
+    }
+    
+    public function actionFormulir(){
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        $user_id = Yii::$app->user->identity;
+        
+        $model = UserBiasa::findOne($user_id->id);
+        $model->setScenario(TbFormulirPendaftaran::SCENE_UPDATE); 
+        
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->tbFormulirPendaftaran == null){
+                $newForm = new TbFormulirPendaftaran();
+                $newForm->user_id = $model->id;
+                $newForm->nama = $model->nama;
+                $newForm->jenis_zakat_id = $model->jenis_zakat_id;
+                if(!$newForm->save()){
+                    print_r($newForm->getErrors());
+                    return;
+                }
+                $model = UserBiasa::findOne($user_id->id);
+                $model->load(Yii::$app->request->post());
+            }
+            
+            if($model->password!= null){
+                $model->setPassword($model->password);
+                $model->generateAuthKey();
+            }
+            
+            if($model->tgl_lahir){
+                $dateObj= \DateTime::createFromFormat('d/m/Y', $model->tgl_lahir); 
+                $newDateString = $dateObj->format('Y/m/d');
+                $model->tgl_lahir = strtotime($newDateString);
+            }
+            
+            if ($model->nomor == null) {
+                $model->scenario = TbFormulirPendaftaran::SCENE_NULL_NUMBER;
+            }
+            
+            $model = $this->uploadFile($model, 'upload_ktp');
+            $model = $this->uploadFile($model, 'upload_kk');
+            $model = $this->uploadFile($model, 'upload_surat_permohonan');
+            $model = $this->uploadFile($model, 'upload_surat_keterangan_tidak_mampu');
+            
+            
+            $zakat = $this->getTypeZakat($model);
+            $zakat->formulir_pendaftaran_id = $model->tbFormulirPendaftaran->id;
+            if ($zakat->load(Yii::$app->request->post())) {
+                switch($model->jenis_zakat_id){
+                    case TbJenisZakat::ZAKAT_BANTUAN_BEROBAT:
+                        $zakat = $this->uploadFile2($zakat, 'upload_surat_keterangan_sakit');
+                        $zakat = $this->uploadFile2($zakat, 'upload_foto_bukti_sakit');
+                        $zakat = $this->uploadFile2($zakat, 'upload_kwitansi');
+                        $zakat = $this->uploadFile2($zakat, 'upload_foto_rumah');
+                        break;
+                    case TbJenisZakat::ZAKAT_MODAL_USAHA:
+                        $zakat = $this->uploadFile2($zakat, 'upload_foto_ukm');
+                        $zakat = $this->uploadFile2($zakat, 'upload_foto_tempat_usaha');
+                        break;
+                    case TbJenisZakat::ZAKAT_TERLILIT_HUTANG:
+                        $zakat = $this->uploadFile2($zakat, 'upload_surat_keterangan_hutang');
+                        $zakat = $this->uploadFile2($zakat, 'upload_foto_rumah');
+                        break;
+                }
+                if(!$zakat->save()){
+                    print_r($zakat->getErrors());
+                    return;
+                }
+                
+            }
+            
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                if($model->save()){
+                    $transaction->commit(); 
+                    return $this->redirect(['formulir', 'id' => $model->tbFormulirPendaftaran->id]);
+                    
+                } 
+            } catch (\Exception $exc) {               
+                $transaction->rollBack();               
+            }
+            
+            
+        } 
+        
+        $zakat = $this->getTypeZakat($model);
+        $model->tgl_lahir = $model->tgl_lahir?date("d/m/Y", $model->tgl_lahir):'';
+        return $this->render('_form', [
+            'model' => $model,
+            'zakat' => $zakat,
+        ]);
+    }
 
+    private function getTypeZakat($model){
+        switch ($model->jenis_zakat_id){
+            case TbJenisZakat::ZAKAT_BANTUAN_BEROBAT:
+                $zakat = TbZakatBantuanBerobat::findOne(['formulir_pendaftaran_id'=>$model->tbFormulirPendaftaran->id]);
+                if($zakat == null){
+                    $zakat = new TbZakatBantuanBerobat();
+                }
+                break;
+            case TbJenisZakat::ZAKAT_MODAL_USAHA:
+                $zakat = TbZakatModalUsaha::findOne(['formulir_pendaftaran_id'=>$model->tbFormulirPendaftaran->id]);
+                if($zakat == null){
+                    $zakat = new TbZakatModalUsaha();
+                }
+                break;
+            case TbJenisZakat::ZAKAT_TERLILIT_HUTANG:
+                $zakat = TbZakatTerlilitHutang::findOne(['formulir_pendaftaran_id'=>$model->tbFormulirPendaftaran->id]);
+                if($zakat == null){
+                    $zakat = new TbZakatTerlilitHutang();
+                }
+                break;    
+            default :
+                $zakat = new TbZakatModalUsaha();
+                break;
+        }
+        return $zakat;
+    }
+    
+    public function actionPict($id, $field){
+        $arr = ['upload_ktp','upload_kk','upload_surat_permohonan','upload_surat_keterangan_tidak_mampu'];
+        if(!in_array($field, $arr)){
+            $model = TbFormulirPendaftaran::findOne($id);
+            switch ($model->jenis_zakat_id){
+                case TbJenisZakat::ZAKAT_BANTUAN_BEROBAT:
+                    $model = TbZakatBantuanBerobat::find();
+                    break;
+                case TbJenisZakat::ZAKAT_MODAL_USAHA:
+                    $model = TbZakatModalUsaha::find();
+                    break;
+                case TbJenisZakat::ZAKAT_TERLILIT_HUTANG:
+                    $model = TbZakatTerlilitHutang::find();
+                    break;
+            }
+            $model->select($field);
+            $model->where('formulir_pendaftaran_id=:did', [':did' => $id]);        
+            
+        } else {
+            $model = TbFormulirPendaftaran::find();
+            $model->select($field);
+            $model->where('id=:did', [':did' => $id]);        
+        }        
+        $ddoc = $model->scalar();
+        header('Content-type: image/png');
+        echo hex2bin($ddoc);
+        return;    
+    }
+    
+    private function uploadFile($model, $name){
+        $sktm = \yii\web\UploadedFile::getInstance($model, $name);
+        if ($sktm) {
+            $dheks = bin2hex(file_get_contents($sktm->tempName));
+            $model->$name = $dheks;
+        } else {
+            $model->unsetRelation([$name]);                
+        }
+        return $model;
+    }
+    
+    private function uploadFile2($model, $name){
+        $sktm = \yii\web\UploadedFile::getInstance($model, $name);
+        if ($sktm) {
+            $dheks = bin2hex(file_get_contents($sktm->tempName));
+            $model->$name = $dheks;
+        } else {
+            unset($model->$name);                
+        }
+        return $model;
+    }
     /**
      * Logs in a user.
      *
@@ -88,7 +280,8 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->redirect(['pengumuman']);
+            //return $this->goBack();
         } else {
             return $this->render('login', [
                 'model' => $model,
