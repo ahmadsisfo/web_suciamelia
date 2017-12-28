@@ -15,6 +15,15 @@ $this->params['breadcrumbs'][] = $this->title;
         
         
         <h3 class="card-title"><?= Html::encode($this->title) ?></h3>
+        
+        <label>40% Complete </label>
+            
+        <div class="progress">
+            <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+              <span class="sr-only">40% Complete (success)</span>
+            </div>
+        </div>
+        
         <p>This is the About page. You may modify the following file to customize its content:</p>
 
         
@@ -30,6 +39,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <b>Info alert:</b> You've got some friends nearby, stop looking at your phone and find them...
             </div>
         </div>
+        
+        
     </div>
     
    
