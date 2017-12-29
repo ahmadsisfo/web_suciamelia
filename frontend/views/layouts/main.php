@@ -75,10 +75,9 @@ MaterialAsset::register($this);
                 <a href="<?= Url::toRoute(['pengumuman']) ?>" class="simple-text"><?= Html::encode(Yii::$app->name) ?></a>
             </div>
             <div class="sidebar-wrapper">
-                <!--<div class="user">
-                    <?=  ''//\common\widgets\SideNav::widget(['items' => require '_item_auth.php',]) ?>
-                    
-                </div>-->
+                <div class="user">
+                    <?=  \common\widgets\SideNav::widget(['items' => require '_item_auth.php',]) ?>
+                </div>
                 <?=  \common\widgets\SideNav::widget(['items' => require '_item_menu.php',]) ?>
                 <!-- ul disini -->
             </div>

@@ -45,7 +45,7 @@ class UserSearch extends User
     {
         $query = User::find()->with('tbAdmin');
 
-        if (!$this->all) $query->where(['!=','status', Yii::STATUS_DELETED])->andWhere(['!=','status', 0]);
+        if (!$this->all) $query->where(['!=','status', Yii::STATUS_DELETED])->andWhere(['id'=>  TbAdmin::find()->select('user_id')->column()]);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

@@ -27,15 +27,20 @@ use yii\helpers\Url;
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <?= $form->field($model, 'username')->textInput() ?>
                 </div>
                 <div class="col-md-4">
                     <?= $form->field($model, 'email')->textInput() ?>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <?= $form->field($model, 'password')->textInput() ?>
                 </div>
+                <div class="col-md-2">
+                    <br/>
+                    <?= $form->field($model, 'status')->checkbox(['value'=>10, 'togglebutton'=>'true',]) ?>     
+                </div>
+                
             </div>
         
             <div class="row">

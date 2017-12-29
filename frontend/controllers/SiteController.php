@@ -18,6 +18,7 @@ use frontend\models\master\TbJenisZakat;
 use frontend\models\master\TbZakatBantuanBerobat;
 use frontend\models\master\TbZakatModalUsaha;
 use frontend\models\master\TbZakatTerlilitHutang;
+use backend\models\approval\TbPenerima;
 
 /**
  * Site controller
@@ -78,8 +79,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-
-        return $this->render('index');
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['login']);
+        }
+        return $this->redirect(['pengumuman']);
+        //return $this->render('index');
     }
     
     public function actionSyarat()
@@ -95,7 +99,57 @@ class SiteController extends Controller
         if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-        return $this->render('pengumuman');
+        
+        
+        return $this->render('pengumuman',[
+            'status' => $this->getStatus(),
+        ]);
+    }
+    
+    private function getStatus(){
+        $user = Yii::$app->user->identity;
+        $user = UserBiasa::findOne($user->id);
+        if($user->tbFormulirPendaftaran == null){
+            return [
+                'status'    =>'Belum Terdaftar',
+                'text'      =>'Anda Belum Terdaftar, Silahkan Isi dan Lengkapi Formulir Anda Terlebih Dahulu',
+                'alert'     =>'warning',
+            ];
+        } else {
+            switch($user->tbFormulirPendaftaran->status_formulir){
+                case TbFormulirPendaftaran::STATUS_PENERIMA:
+                    return [
+                        'penerima'  => TbPenerima::findOne(['formulir_pendaftaran_id'=>$user->tbFormulirPendaftaran->id]),
+                        'status'=>'Penerima',
+                        'text'  =>'Selamat, Anda diterima sebagai penerima Zakat',
+                        'alert' =>'success',
+
+                    ];
+                case TbFormulirPendaftaran::STATUS_SURVEY_DITOLAK:
+                    return [
+                        'status'=>'Survey Ditolak',
+                        'text'  =>'Mohon Maaf, Permohonan anda belum kami setujui',
+                        'alert' =>'danger',
+                    ];
+                case TbFormulirPendaftaran::STATUS_SURVEY_DISETUJUI:
+                    return [
+                        'status'=>'Survey Disetujui',
+                        'text'  =>'Hasil survey menyatakan anda layak untuk menerima zakat. Saat ini sedang dalam proses approval oleh pihak Direksi. Harap Menunggu.',
+                        'alert' =>'info',
+                    ];                        
+                default :
+                    return [
+                        'status'=>'Terdaftar',
+                        'text'  =>'Anda Sudah Terdaftar.',
+                        'alert' =>'primary',
+
+                    ];
+                    break;
+                    
+            }
+            
+            
+        }        
     }
     
     public function actionFormulir(){
@@ -280,6 +334,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            
             return $this->redirect(['pengumuman']);
             //return $this->goBack();
         } else {

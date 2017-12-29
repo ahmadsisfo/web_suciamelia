@@ -75,13 +75,20 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
-        }
+        
+        $admin = \backend\models\master\TbAdmin::find()->select('user_id')->column();
+        if ($model->load(Yii::$app->request->post()) ) {
+            $admin_exist = \common\models\User::findByUsername($model->username);
+            if($admin_exist != null && in_array($admin_exist->id, $admin)){
+                if($model->login()){
+                    return $this->goBack();
+                }
+            }
+        } 
+        return $this->render('login', [
+            'model' => $model,
+        ]);
+
     }
 
     /**
