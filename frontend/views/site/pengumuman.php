@@ -6,6 +6,7 @@ use yii\helpers\Html;
 
 $this->title = 'Status';
 $this->params['breadcrumbs'][] = $this->title;
+$contact = 1234567890;
 ?>
 <div class="site-about card">
     <div class="card-header card-header-icon" data-background-color="green">
@@ -19,7 +20,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="alert alert-<?= $status['alert'] ?>">
             <button type="button" aria-hidden="true" class="close">×</button>
             <span>
-                <b> Status Anda - </b> <?= $status['text'] ?></span>
+                <b> Status Anda - </b> <?= $status['text'] ?>
+                <?= $status['field']['persen']<100?'Namun data anda belum lengkap, Mohon Lengkapi Terlebih Dahulu.':'Terimakasih Karena Sudah Melengkapi Data Anda.' ?>
+            </span>
+            
         </div>
         
         <?php 
@@ -29,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <p>
                             Bentuk zakat yang kami berikan kepada anda adalah <strong> '.$status['penerima']->jumlah_zakat.' '.$status['penerima']->desc.'</strong>
                         
-                            . Untuk informasi lebih lanjut hubungi Customer Service kami 08123456789. Terima Kasih.
+                            . Untuk informasi lebih lanjut hubungi Customer Service kami '.$contact.'. Terima Kasih.
                         </p>
                         <small>
                             Direktur - BAZNAS
@@ -39,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 case 'Survey Ditolak':
                     echo'<blockquote>
                         <p>
-                            Untuk informasi lebih lanjut hubungi Customer Service kami 08123456789. Terima Kasih.
+                            Untuk informasi lebih lanjut hubungi Customer Service kami '.$contact.'. Terima Kasih.
                         </p>
                         <small>
                             Direktur - BAZNAS
@@ -49,38 +53,66 @@ $this->params['breadcrumbs'][] = $this->title;
                  case 'Survey Disetujui':
                     echo'<blockquote>
                         <p>
-                            Untuk informasi lebih lanjut hubungi Customer Service kami 08123456789. Terima Kasih.
+                            Untuk informasi lebih lanjut hubungi Customer Service kami '.$contact.'. Terima Kasih.
                         </p>
                         <small>
                             Direktur - BAZNAS
                         </small>
                     </blockquote>';
                      break;
-                default:
-                    echo'
-                    <p>This is the About page. You may modify the following file to customize its content:</p>
-
-                    <label>40% Complete </label>
+                case 'Belum Terdaftar':
+                    echo' 
+                    <label>0% Please Complete Your Task </label>
             
                     <div class="progress">
-                        <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                          <span class="sr-only">40% Complete (success)</span>
+                        <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                          <span class="sr-only">0% Complete Your Task</span>
                         </div>
                     </div>
                     
-                    <div class="alert alert-info">
-                        <div class="container-fluid">
-                            <div class="alert-icon"  >
-                                <i class="fa fa-info" style="color:white"></i>
-                            </div>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true"><i class="material-icons">clear</i></span>
-                            </button>
-
-                            <b>Info alert:</b> You`ve got some friends nearby, stop looking at your phone and find them...
+                    ';
+                    break;
+                default:
+                    $warna = $status['field']['persen']==100?'success':'primary';
+                    echo'
+                    <label>'.$status['field']['persen'].'% Complete </label>
+            
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-'.$warna.' progress-bar-striped" role="progressbar" aria-valuenow="'.$status['field']['persen'].'" aria-valuemin="0" aria-valuemax="100" style="width: '.$status['field']['persen'].'%">
+                          <span class="sr-only">'.$status['field']['persen'].'% Complete (success)</span>
                         </div>
                     </div>
                     ';
+                    if($status['field']['persen']<100){
+                        echo'<div class="alert alert-info">
+                            <div class="container-fluid">
+                                <div class="alert-icon"  >
+                                    <i class="fa fa-info" style="color:white"></i>
+                                </div>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true"><i class="material-icons">clear</i></span>
+                                </button>
+
+                                <b>Mohon Lengkapi Field Berikut :</b> <br/><br/> <ul>
+                                ';
+
+                        foreach($status['field']['fields'] as $item){
+                            echo'<li>'.$item.'</li>';
+                        }
+
+                        echo'</ul></div>
+                        </div>
+                        ';
+                    } else {
+                        echo'<blockquote>
+                            <p>
+                                Tahapan Selanjutnya, tim kami akan melakukan survey, harap menunggu. Untuk informasi lebih lanjut hubungi Customer Service kami '.$contact.'. Terima Kasih.
+                            </p>
+                            <small>
+                                Direktur - BAZNAS
+                            </small>
+                        </blockquote>';
+                    }
                     break;
             }
         ?>

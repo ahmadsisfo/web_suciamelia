@@ -98,7 +98,7 @@ class TbFormulirPendaftaran extends \yii\db\ActiveRecord
             'alamat' => 'Alamat',
             'agama' => 'Agama',
             'pekerjaan' => 'Pekerjaan',
-            'status' => 'Status',
+            //'status_formulir' => 'Status',
             'no_hp' => 'No Hp',
             'upload_surat_permohonan' => 'Upload Surat Permohonan',
             'upload_ktp' => 'Upload Ktp',
@@ -165,6 +165,40 @@ class TbFormulirPendaftaran extends \yii\db\ActiveRecord
     public function getTbZakatTerlilitHutangs()
     {
         return $this->hasMany(TbZakatTerlilitHutang::className(), ['formulir_pendaftaran_id' => 'id']);
+    }
+    
+    public function getEmptyField(){
+        $fields = [];
+        foreach($this->attributeLabels() as $key => $val){
+            if($this->$key == null){
+                $fields[] = $key;
+            }
+        }
+        
+        switch($this->jenis_zakat_id){
+            case TbJenisZakat::ZAKAT_BANTUAN_BEROBAT:
+                $zakat = TbZakatBantuanBerobat::findOne(['formulir_pendaftaran_id'=>$this->id]);
+                break;
+            case TbJenisZakat::ZAKAT_MODAL_USAHA:
+                $zakat = TbZakatModalUsaha::findOne(['formulir_pendaftaran_id'=>$this->id]);
+                break;
+            case TbJenisZakat::ZAKAT_TERLILIT_HUTANG:
+                $zakat = TbZakatTerlilitHutang::findOne(['formulir_pendaftaran_id'=>$this->id]);
+                break;
+        }
+        
+        foreach ($zakat->attributeLabels() as $key => $val){
+            if($zakat->$key == null){
+                $fields[] = $key;
+            }
+        }
+        
+        $countAll = count($this->attributeLabels())+count($zakat->attributeLabels());
+        return [
+            'persen' => (int) (($countAll-count($fields))/($countAll)*100),
+            'fields' => $fields,
+        ];
+        
     }
     
     public function behaviors()

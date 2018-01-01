@@ -114,41 +114,49 @@ class SiteController extends Controller
                 'status'    =>'Belum Terdaftar',
                 'text'      =>'Anda Belum Terdaftar, Silahkan Isi dan Lengkapi Formulir Anda Terlebih Dahulu',
                 'alert'     =>'warning',
+                
             ];
         } else {
-            switch($user->tbFormulirPendaftaran->status_formulir){
-                case TbFormulirPendaftaran::STATUS_PENERIMA:
-                    return [
-                        'penerima'  => TbPenerima::findOne(['formulir_pendaftaran_id'=>$user->tbFormulirPendaftaran->id]),
-                        'status'=>'Penerima',
-                        'text'  =>'Selamat, Anda diterima sebagai penerima Zakat',
-                        'alert' =>'success',
+            if($user->tbFormulirPendaftaran->status_formulir === null){
+                return [
+                    'status'=>'Terdaftar',
+                    'text'  =>'Anda Sudah Terdaftar.',
+                    'alert' =>'primary',
+                    'field' =>$user->tbFormulirPendaftaran->emptyField
+                ];
+            } else {
+                switch($user->tbFormulirPendaftaran->status_formulir){
+                    case TbFormulirPendaftaran::STATUS_PENERIMA:
+                        return [
+                            'penerima'  => TbPenerima::findOne(['formulir_pendaftaran_id'=>$user->tbFormulirPendaftaran->id]),
+                            'status'=>'Penerima',
+                            'text'  =>'Selamat, Anda diterima sebagai penerima Zakat',
+                            'alert' =>'success',
 
-                    ];
-                case TbFormulirPendaftaran::STATUS_SURVEY_DITOLAK:
-                    return [
-                        'status'=>'Survey Ditolak',
-                        'text'  =>'Mohon Maaf, Permohonan anda belum kami setujui',
-                        'alert' =>'danger',
-                    ];
-                case TbFormulirPendaftaran::STATUS_SURVEY_DISETUJUI:
-                    return [
-                        'status'=>'Survey Disetujui',
-                        'text'  =>'Hasil survey menyatakan anda layak untuk menerima zakat. Saat ini sedang dalam proses approval oleh pihak Direksi. Harap Menunggu.',
-                        'alert' =>'info',
-                    ];                        
-                default :
-                    return [
-                        'status'=>'Terdaftar',
-                        'text'  =>'Anda Sudah Terdaftar.',
-                        'alert' =>'primary',
+                        ];
+                    case TbFormulirPendaftaran::STATUS_SURVEY_DITOLAK:
+                        return [
+                            'status'=>'Survey Ditolak',
+                            'text'  =>'Mohon Maaf, Permohonan anda belum kami setujui',
+                            'alert' =>'danger',
+                        ];
+                    case TbFormulirPendaftaran::STATUS_SURVEY_DISETUJUI:
+                        return [
+                            'status'=>'Survey Disetujui',
+                            'text'  =>'Hasil survey menyatakan anda layak untuk menerima zakat. Saat ini sedang dalam proses approval oleh pihak Direksi. Harap Menunggu.',
+                            'alert' =>'info',
+                        ];                        
+                    default :
+                        return [
+                            'status'=>'Terdaftar',
+                            'text'  =>'Anda Sudah Terdaftar.',
+                            'alert' =>'primary',
 
-                    ];
-                    break;
-                    
+                        ];
+                        break;
+
+                }            
             }
-            
-            
         }        
     }
     

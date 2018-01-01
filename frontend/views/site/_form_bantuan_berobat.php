@@ -77,7 +77,7 @@ use yii\helpers\Url;
     </div>
     <div class="col-md-6">
         <?php if($zakat->upload_foto_rumah){
-            $url = Url::toRoute(['pict','id'=>$zakat->formulir_pendaftaran_id,'field'=>'upload_foto_tempat_usaha']);
+            $url = Url::toRoute(['pict','id'=>$zakat->formulir_pendaftaran_id,'field'=>'upload_foto_rumah']);
             echo'<div class="card-avatar picture"><a target="_blank" href="'.$url.'"><img src="'.$url.'" style="width:100px" /></a></div>';
         } ?>
         <?= $form->field($zakat, 'upload_foto_rumah')->widget(kartik\file\FileInput::classname(), [
