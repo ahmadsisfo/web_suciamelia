@@ -63,6 +63,7 @@ return [
             'site/logout',
             'site/syarat',
             'site/formulir',
+            'site/cetak',
             'site/pict',
             'site/pengumuman',
             'site/index',

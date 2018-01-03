@@ -18,6 +18,7 @@ return[
     //'<li class="header">MAIN NAVIGATION</li>',
     ['label' => 'Syarat & Ketentuan', 'icon' => 'balance-scale', 'fa'=>true, 'url'=>['site/syarat'],'visible' => !Yii::$app->user->isGuest],
     ['label' => 'Formulir', 'icon' => 'id-card-o', 'fa'=>true, 'url'=>['site/formulir'],'visible' => !Yii::$app->user->isGuest],
+    ['label' => 'Bukti Pendaftaran', 'icon' => 'print', 'fa'=>true, 'url'=>['site/cetak'],'visible' => !Yii::$app->user->isGuest],
     ['label' => 'Status', 'icon' => 'handshake-o', 'fa'=>true, 'url'=>['site/pengumuman'],'visible' => !Yii::$app->user->isGuest],
     ['label' => 'Login', 'icon' => 'sign-in', 'fa'=>true, 'iconOptions' => ['class' => 'text-green'], 'url' => ['/site/login'],
         'visible' => Yii::$app->user->isGuest],

@@ -21,7 +21,9 @@ $contact = 1234567890;
             <button type="button" aria-hidden="true" class="close">×</button>
             <span>
                 <b> Status Anda - </b> <?= $status['text'] ?>
+                <?php if(isset($status['field'])){ ?>
                 <?= $status['field']['persen']<100?'Namun data anda belum lengkap, Mohon Lengkapi Terlebih Dahulu.':'Terimakasih Karena Sudah Melengkapi Data Anda.' ?>
+                <?php } ?>
             </span>
             
         </div>

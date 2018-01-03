@@ -20,6 +20,7 @@ use frontend\models\master\TbZakatModalUsaha;
 use frontend\models\master\TbZakatTerlilitHutang;
 use backend\models\approval\TbPenerima;
 
+
 /**
  * Site controller
  */
@@ -103,6 +104,18 @@ class SiteController extends Controller
         
         return $this->render('pengumuman',[
             'status' => $this->getStatus(),
+        ]);
+    }
+
+    public function actionCetak()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+         
+        return $this->render('cetak',[
+            'status' => $this->getStatus(),
+            'model'  => TbFormulirPendaftaran::findOne(['user_id'=>Yii::$app->user->identity->id])
         ]);
     }
     
