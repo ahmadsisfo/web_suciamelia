@@ -112,12 +112,7 @@ MaterialAsset::register($this);
                                 <a href="#">
                                     Company
                                 </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Portofolio
-                                </a>
-                            </li>
+                            </li>                            
                             <li>
                                 <a href="#">
                                     Blog
